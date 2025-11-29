@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>CloudChain VM - Decentralized Computing</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            height: auto;
+        }
+
+        /* Animated background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 20%, rgba(72, 187, 120, 0.1) 0%, transparent 50%);
+            animation: bgShift 15s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes bgShift {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.8; transform: scale(1.1); }
+        }
+
+        /* Header */
+        .header {
+            position: relative;
+            z-index: 10;
+            padding: 16px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .network-badge {
+            padding: 6px 14px;
+            background: rgba(72, 187, 120, 0.1);
+            border: 1px solid rgba(72, 187, 120, 0.3);
+            border-radius: 20px;
+            font-size: 12px;
+            color: #48bb78;
+            font-weight: 600;
+        }
+
+        /* Main container */
+        .main-container {
+            position: relative;
+            z-index: 5;
+            display: grid;
+            grid-template-columns: 1.1fr 1fr;
+            height: calc(100vh - 70px);
+        }
+
+        .left-section {
+            padding: 50px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+
+        .right-section {
+            padding: 40px 50px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            height: auto !important;
+            overflow: visible !important;
+        }
+
+        /* Hero section */
+        .hero-badge {
+            display: inline-block;
+            padding: 6px 14px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .hero-title {
+            font-size: 56px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #ffffff 0%, #a0aec0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.6;
+            margin-bottom: 35px;
+            max-width: 520px;
+        }
+
+        .feature-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-top: 30px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 14px;
+        }
+
+        .feature-icon {
+            width: 22px;
+            height: 22px;
+            background: rgba(102, 126, 234, 0.15);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #667eea;
+            font-weight: 700;
+            font-size: 12px;
+            flex-shrink: 0;
+        }
+
+        /* Form section */
+        .form-header {
+            margin-bottom: 25px;
+        }
+
+        .form-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .form-subtitle {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .wallet-status {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .wallet-connected {
+            color: #48bb78;
+            font-weight: 600;
+        }
+
+        .status-alert {
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 12px;
+            font-weight: 500;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .alert-success {
+            background: rgba(72, 187, 120, 0.15);
+            border: 1px solid rgba(72, 187, 120, 0.3);
+            color: #68d391;
+        }
+
+        .alert-error {
+            background: rgba(245, 101, 101, 0.15);
+            border: 1px solid rgba(245, 101, 101, 0.3);
+            color: #fc8181;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 7px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 12px 14px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+        }
+
+        select:hover, input:hover {
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        select option {
+            background: #1a1a2e;
+            color: #fff;
+            padding: 10px;
+        }
+
+                .price-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2) 0%, rgba(118, 75, 162, 0.2) 100%);
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .price-label {
+            font-size: 11px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .price-amount {
+            font-size: 46px;
+            font-weight: 800;
+            color: #fff;
+            position: relative;
+            z-index: 1;
+        }
+
+        .price-unit {
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-left: 6px;
+            font-weight: 600;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
+            color: white;
+            box-shadow: 0 4px 20px rgba(72, 187, 120, 0.4);
+        }
+
+        .btn-success:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(72, 187, 120, 0.5);
+        }
+
+        .btn:disabled {
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">⚡</div>
+            <span class="logo-text">CloudChain</span>
+        </div>
+        <div class="header-right">
+            <div class="network-badge">● Hardhat Local (31337)</div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Left: Hero Section -->
+        <div class="left-section">
+            <div class="hero-badge">🚀 Blockchain-Powered Computing</div>
+            <h1 class="hero-title">Rent High-Performance VMs with Crypto</h1>
+            <p class="hero-subtitle">
+                Pay per minute for enterprise-grade virtual machines. No subscriptions, no commitments. 
+                Just connect and launch through a smart contract.
+            </p>
+
+            <div class="feature-list">
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <span>Instant deployment under 30 seconds</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <span>RTX 4080 GPU available for AI & gaming</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <span>Transparent on-chain access control</span>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">✓</div>
+                    <span>99.9% uptime guarantee</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Configuration Form -->
+        <div class="right-section">
+            <div class="form-header">
+                <h2 class="form-title">Configure Your VM</h2>
+                <p class="form-subtitle">Select hardware specs and duration</p>
+            </div>
+
+            <div class="wallet-status" id="walletInfo">
+                <span id="walletStatus">🔒 Not connected (Hardhat dev wallet)</span>
+            </div>
+
+            <div id="statusAlert" class="status-alert"></div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="cpuSelect">CPU Cores</label>
+                    <select id="cpuSelect">
+                        <option value="2">2 cores</option>
+                        <option value="4">4 cores</option>
+                        <option value="8">8 cores</option>
+                        <option value="16">16 cores</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="ramSelect">RAM</label>
+                    <select id="ramSelect">
+                        <option value="8">8 GB</option>
+                        <option value="16">16 GB</option>
+                        <option value="32">32 GB</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="gpuSelect">GPU (Optional)</label>
+                <select id="gpuSelect">
+                    <option value="none">No GPU</option>
+                    <option value="gtx1650">GTX 1650</option>
+                    <option value="rtx3060">RTX 3060</option>
+                    <option value="rtx4080">RTX 4080</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label" for="durationInput">Duration (minutes)</label>
+                <input type="number" id="durationInput" min="1" value="60" />
+            </div>
+
+            <div class="price-box">
+                <div class="price-label">Total Cost</div>
+                <div class="price-amount">
+                    <span id="priceDisplay">0</span>
+                    <span class="price-unit">units (0.0001 ETH / unit)</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" id="connectBtn" onclick="connectWallet()">
+                Connect Dev Wallet
+            </button>
+
+            <button class="btn btn-primary" id="purchaseBtn" onclick="purchaseAccess()" disabled>
+                Purchase Access
+            </button>
+
+            <button class="btn btn-success" id="launchBtn" onclick="launchVM()" disabled>
+                🚀 Launch VM Session
+            </button>
+        </div>
+    </div>
+
+<script src="https://unpkg.com/ethers@5.7.2/dist/ethers.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js"></script>
+
+<script>
+/* CONTRACT CONFIG */
+const CONTRACT_ADDRESS = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+
+const CONTRACT_ABI = [
+    {
+        "inputs": [{"internalType": "address", "name": "", "type": "address"}],
+        "name": "expiry",
+        "outputs": [{"internalType": "uint256", "name": "", "type": "uint256"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{"internalType": "address", "name": "user", "type": "address"}],
+        "name": "hasAccess",
+        "outputs": [{"internalType": "bool", "name": "", "type": "bool"}],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [{"internalType": "uint256", "name": "durationMinutes", "type": "uint256"}],
+        "name": "purchaseAccess",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    }
+];
+
+/* GLOBAL STATE */
+let userAddress = null;
+let provider = null;
+let signer = null;
+let contract = null;
+let accessActive = false;
+let expiryInterval = null;
+
+
+async function forceMine() {
+    setInterval(async () => {
+        try {
+            await provider.send("evm_mine", []);
+        } catch (err) {
+            console.log("evm_mine error:", err);
+        }
+    }, 1000);
+}
+
+/* PRICING */
+const CPU_PRICING = { 2: 1, 4: 2, 8: 4, 16: 6 };
+const RAM_PRICING = { 8: 1, 16: 2, 32: 3 };
+const GPU_PRICING = { 'none': 0, 'gtx1650': 5, 'rtx3060': 10, 'rtx4080': 20 };
+
+/* =======================================================
+   PRICE CALCULATION
+   ======================================================= */
+document.getElementById('cpuSelect').addEventListener('change', calculatePrice);
+document.getElementById('ramSelect').addEventListener('change', calculatePrice);
+document.getElementById('gpuSelect').addEventListener('change', calculatePrice);
+document.getElementById('durationInput').addEventListener('input', calculatePrice);
+
+function calculatePrice() {
+    const cpu = parseInt(document.getElementById('cpuSelect').value);
+    const ram = parseInt(document.getElementById('ramSelect').value);
+    const gpu = document.getElementById('gpuSelect').value;
+    const duration = parseInt(document.getElementById('durationInput').value) || 0;
+
+    const cpuUnits = CPU_PRICING[cpu] || 0;
+    const ramUnits = RAM_PRICING[ram] || 0;
+    const gpuUnits = GPU_PRICING[gpu] || 0;
+
+    const totalCost = (cpuUnits + ramUnits + gpuUnits) * duration;
+    document.getElementById('priceDisplay').textContent = totalCost;
+}
+
+/* =======================================================
+   CONNECT HARDHAT WALLET
+   ======================================================= */
+async function connectWallet() {
+    try {
+        provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
+        await provider.ready;
+        signer = provider.getSigner(0);
+        userAddress = await signer.getAddress();
+
+        contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+        forceMine();
+
+        const shortAddr = `${userAddress.substring(0, 6)}...${userAddress.substring(38)}`;
+        document.getElementById('walletStatus').innerHTML = 
+            `<span class="wallet-connected">✓ Connected: ${shortAddr}</span>`;
+
+        document.getElementById('connectBtn').textContent = '✓ Connected';
+        document.getElementById('connectBtn').disabled = true;
+        document.getElementById('purchaseBtn').disabled = false;
+
+        showStatus('✓ Connected to Hardhat dev wallet.', 'success');
+
+        checkAccess();
+
+    } catch (err) {
+        showStatus('Failed to connect to Hardhat node.', 'error');
+        console.error(err);
+    }
+}
+
+/* =======================================================
+   PURCHASE ACCESS
+   ======================================================= */
+async function purchaseAccess() {
+    try {
+        const duration = parseInt(document.getElementById('durationInput').value);
+        if (!duration || duration <= 0) {
+            showStatus('Enter valid duration.', 'error');
+            return;
+        }
+
+        const units = parseFloat(document.getElementById('priceDisplay').textContent);
+        if (units <= 0) {
+            showStatus('Total must be positive.', 'error');
+            return;
+        }
+
+        const ethCost = (units * 0.0001).toString();
+        showStatus(`Sending ${ethCost} ETH...`, 'success');
+
+        const tx = await contract.purchaseAccess(duration, {
+            value: ethers.utils.parseEther(ethCost)
+        });
+
+        await tx.wait();
+        showStatus('✓ Purchase successful!', 'success');
+        startExpiryMonitorFrontend(duration);
+        checkAccess();   
+
+
+    } catch (error) {
+        showStatus('Transaction failed.', 'error');
+        console.error(error);
+    }
+}
+
+/* =======================================================
+   CHECK ACCESS
+   ======================================================= */
+async function checkAccess() {
+    try {
+        const savedExpiry = parseInt(localStorage.getItem("cloudchain_expiry"));
+
+        if (!savedExpiry) {
+            accessActive = false;
+        } else {
+            accessActive = Date.now() < savedExpiry;
+        }
+
+        if (accessActive) {
+            document.getElementById('launchBtn').disabled = false;
+            showStatus('✓ Access Active!', 'success');
+        } else {
+            document.getElementById('launchBtn').disabled = true;
+            showStatus('Access not active.', 'error');
+        }
+
+    } catch (error) {
+        showStatus('Failed to check access.', 'error');
+        console.error(error);
+    }
+}
+
+
+/* =======================================================
+   LAUNCH VM
+   ======================================================= */
+let vmTab = null;
+
+function launchVM() {
+    if (!accessActive) {
+        showStatus('Access expired.', 'error');
+        return;
+    }
+
+    vmTab = window.open("http://localhost:8080/#/", "_blank");
+
+    if (!vmTab) {
+        alert("⚠ Popup blocked! Allow popups for this site.");
+    }
+}
+
+
+/* =======================================================
+   STATUS MESSAGE
+   ======================================================= */
+function showStatus(message, type) {
+    const alert = document.getElementById('statusAlert');
+    alert.textContent = message;
+    alert.className = `status-alert alert-${type}`;
+    alert.style.display = 'block';
+    setTimeout(() => alert.style.display = 'none', 6000);
+}
+
+/* =======================================================
+   ACCESS EXPIRY MONITOR
+   ======================================================= */
+function startExpiryMonitorFrontend(durationMinutes) {
+    if (expiryInterval) clearInterval(expiryInterval);
+
+    const expireAt = Date.now() + 30 * 1000;
+    localStorage.setItem("cloudchain_expiry", expireAt);
+
+    console.log("🔥 Timer started. Expires in 10 seconds:", expireAt);
+
+    expiryInterval = setInterval(() => {
+        const savedExpiry = parseInt(localStorage.getItem("cloudchain_expiry"));
+        console.log("⏳ Checking expiry:", savedExpiry, "Now:", Date.now());
+
+        if (Date.now() >= savedExpiry) {
+            console.log("💀 Session expired! Firing popup...");
+            clearInterval(expiryInterval);
+            handleExpiryReached();
+        }
+    }, 1000);
+}
+
+/* =======================================================
+   HANDLE ACCESS EXPIRED
+   ======================================================= */
+function handleExpiryReached() {
+    document.getElementById('launchBtn').disabled = true;
+
+    // 🔥 Force close VM tab if open
+    try {
+        if (vmTab && !vmTab.closed) {
+            vmTab.close();
+        }
+    } catch (e) {
+        console.log("Unable to close tab automatically:", e);
+    }
+
+    showTimeoutPopup();
+}
+
+
+/* =======================================================
+   POPUP FUNCTIONS
+   ======================================================= */
+function showTimeoutPopup() {
+    document.getElementById("timeoutPopup").style.display = "flex";
+}
+
+function closeSessionPopup() {
+    document.getElementById("timeoutPopup").style.display = "none";
+}
+
+/* INITIAL PRICE */
+calculatePrice();
+
+</script>
+
+
+<!-- =======================================================
+     TIMEOUT POPUP
+     ======================================================= -->
+<div id="timeoutPopup" style="
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+">
+<div style="
+    background: #11121a;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 32px;
+    border-radius: 14px;
+    width: 360px;
+    text-align: center;
+    box-shadow: 0 0 40px rgba(0,0,0,0.5);
+">
+    <h2 style="font-size: 22px; font-weight: 700; margin-bottom: 16px;">
+        Session Expired
+    </h2>
+
+    <p style="color: rgba(255,255,255,0.6); font-size: 14px; margin-bottom: 24px;">
+        Your VM rental time has ended.  
+        Purchase more time to continue using the VM.
+    </p>
+
+    <button onclick="closeSessionPopup()" style="
+        background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
+        border: none;
+        padding: 12px 18px;
+        color: #fff;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        width: 100%;
+    ">
+        OK
+    </button>
+</div>
+</div>
+
+
+</body>
+</html>
+

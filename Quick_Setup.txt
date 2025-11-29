@@ -1,0 +1,53 @@
+Terminal 1:
+npx hardhat clean
+npx hardhat compile
+npx hardhat node
+
+Terminal 2:
+npx hardhat run scripts/deploy.cjs --network localhost
+
+Terminal 3:
+docker container prune -f (prune older containers)
+
+Guacamole Setup: http://localhost:8080/#/
+docker run -d --name guac-easy -p 8080:8080 oznu/guacamole
+
+VM-1 Image and Setup:
+docker run -d --name ubuntu-vnc -p 5901:5901 dorowu/ubuntu-desktop-lxde-vnc
+
+UBUNTU LXDE CONFIG ON ONZU/guacamole
+Name: Ubuntu lxde
+Network
+Hostname: 172.17.0.3
+Port: 5900
+Authentication
+password: vncpassword
+
+VM-2 Image and Setup:
+docker run -d --name ubuntu-xfce -p 5902:5901 accetto/ubuntu-vnc-xfce
+
+docker inspect -f "{{ range .NetworkSettings.Networks }}{{ .IPAddress }}{{ end }}" ubuntu-xfce(Use this in-case Container IP changes)
+
+docker ps -a (Use this command to get the Port number of Containers)
+
+UBUNTU XFCE CONFIG ON ONZU/guacamole
+Name: Ubuntu xfce
+Network
+Hostname: 172.17.0.4
+Port: 5901
+Authentication
+password: headless
+
+
+REQUIREMENTS AND VERSIONS
+Node.js: v22.21.1 
+NPM: 10.9.4 
+Hardhat: 3.0.15 
+ethers.js: 5.7.2 
+Docker Desktop: Latest 
+Guacamole Image: oznu/guacamole 
+
+
+
+
+
